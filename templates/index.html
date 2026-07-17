@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ミュージアムマップ</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <!-- カスタムCSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- ハンバーガーメニューボタン -->
+    <button id="menu-btn" onclick="toggleSidebar()">☰</button>
+
+    <!-- サイドバー -->
+    <div id="sidebar" class="closed">
+        <h2>ミュージアム検索</h2>
+        <hr>
+
+        <!-- 1. キーワード・名前検索 -->
+        <div class="search-section">
+            <label for="search-input">名前で検索</label>
+            <!-- js側でイベントリスナーを追加するため、oninput属性は削除 -->
+            <input type="text" id="search-input" placeholder="美術館の名前を入力...">
+        </div>
+
+        <!-- 2. カテゴリフィルター（トグルボタン風ボタングループ） -->
+        <div class="search-section">
+            <label>分類</label>
+            <div class="toggle-group">
+                <button type="button" id="btn-all" class="toggle-btn active" onclick="setCategory('all')">すべて</button>
+                <button type="button" id="btn-art" class="toggle-btn" onclick="setCategory('art_gallery')">🎨 美術館</button>
+                <button type="button" id="btn-museum" class="toggle-btn" onclick="setCategory('museum')">🏛️ 博物館</button>
+            </div>
+            <!-- 現在の選択値を隠しデータとして保持する用 -->
+            <input type="hidden" id="category-filter" value="all">
+        </div>
+
+        <!-- 3. 47都道府県フィルター -->
+        <div class="search-section">
+            <label for="pref-filter">都道府県</label>
+            <!-- js側でイベントリスナーを追加するため、onchange属性は削除 -->
+            <select id="pref-filter">
+                <option value="all">すべての都道府県</option>
+                <optgroup label="北海道・東北">
+                    <option value="北海道">北海道</option><option value="青森県">青森県</option><option value="岩手県">岩手県</option>
+                    <option value="宮城県">宮城県</option><option value="秋田県">秋田県</option><option value="山形県">山形県</option>
+                    <option value="福島県">福島県</option>
+                </optgroup>
+                <optgroup label="関東">
+                    <option value="茨城県">茨城県</option><option value="栃木県">栃木県</option><option value="群馬県">群馬県</option>
+                    <option value="埼玉県">埼玉県</option><option value="千葉県">千葉県</option><option value="東京都">東京都</option>
+                    <option value="神奈川県">神奈川県</option>
+                </optgroup>
+                <optgroup label="中部">
+                    <option value="新潟県">新潟県</option><option value="富山県">富山県</option><option value="石川県">石川県</option>
+                    <option value="福井県">福井県</option><option value="山梨県">山梨県</option><option value="長野県">長野県</option>
+                    <option value="岐阜県">岐阜県</option><option value="静岡県">静岡県</option><option value="愛知県">愛知県</option>
+                </optgroup>
+                <optgroup label="近畿">
+                    <option value="三重県">三重県</option><option value="滋賀県">滋賀県</option><option value="京都府">京都府</option>
+                    <option value="大阪府">大阪府</option><option value="兵庫県">兵庫県</option><option value="奈良県">奈良県</option>
+                    <option value="和歌山県">和歌山県</option>
+                </optgroup>
+                <optgroup label="中国・四国">
+                    <option value="鳥取県">鳥取県</option><option value="島根県">島根県</option><option value="岡山県">岡山県</option>
+                    <option value="広島県">広島県</option><option value="山口県">山口県</option><option value="徳島県">徳島県</option>
+                    <option value="香川県">香川県</option><option value="愛媛県">愛媛県</option><option value="高知県">高知県</option>
+                </optgroup>
+                <optgroup label="九州・沖縄">
+                    <option value="福岡県">福岡県</option><option value="佐賀県">佐賀県</option><option value="長崎県">長崎県</option>
+                    <option value="熊本県">熊本県</option><option value="大分県">大分県</option><option value="宮崎県">宮崎県</option>
+                    <option value="鹿児島県">鹿児島県</option><option value="沖縄県">沖縄県</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <p style="font-size: 11px; color: #888; margin-top: 20px;">条件を変更すると、該当する場所に自動ズームします。</p>
+        <p style="font-size: 11px; color: #888;">※動作を軽くするため、地図を拡大した時のみピンが表示されます。</p>
+    </div>
+
+    <!-- 地図コンテナ -->
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Flaskからのデータ受け渡し -->
+    <script>
+        const facilities = {{ facilities|tojson }};
+    </script>
+
+    <!-- カスタムJavaScript -->
+    <script src="{{ url_for('static', filename='js/map.js') }}"></script>
+</body>
+</html>

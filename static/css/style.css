@@ -1,0 +1,120 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    overflow: hidden;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* ハンバーガーボタン */
+#menu-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 1001;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    transition: background 0.3s;
+}
+
+#menu-btn:hover {
+    background: #555;
+}
+
+/* スライド式サイドバー */
+#sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+    padding: 80px 20px 20px 20px; /* ボタンを避けるための上の余白 */
+    box-sizing: border-box;
+}
+
+/* 閉じている状態は左側（画面外）に隠す */
+#sidebar.closed {
+    transform: translateX(-300px);
+}
+
+#sidebar h2 {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    color: #333;
+}
+
+.search-section {
+    margin-bottom: 20px;
+}
+
+.search-section label {
+    display: block;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #555;
+}
+
+.search-section input,
+.search-section select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* トグルボタン（グループ全般） */
+.toggle-group {
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+/* 各トグルボタンの基本設定 */
+.toggle-btn {
+    flex: 1;
+    background: #f7f7f7;
+    border: none;
+    padding: 10px 0;
+    font-size: 13px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: bold;
+}
+
+/* 隣り合うボタンの境界線 */
+.toggle-btn:not(:last-child) {
+    border-right: 1px solid #ccc;
+}
+
+/* ホバー時の挙動 */
+.toggle-btn:hover {
+    background: #eee;
+}
+
+/* 選択されている（アクティブ）状態のボタン */
+.toggle-btn.active {
+    background: #333;
+    color: #fff;
+}
